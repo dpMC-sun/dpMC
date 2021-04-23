@@ -122,6 +122,27 @@ class Gears:
                     pass
         return aas
     
+    def gettingData_pred(self, filenames):
+        
+        ions = []
+        
+        for filename in filenames:
+            print(filename)
+            ion = self.mapping_pred(filename)
+
+        ions = np.array(ion)
+
+        print (ions.shape)
+        return ions
+    
+    def load_data_pred(self,foldername):
+        print("Loading:")
+        filenames = []
+        
+        for file in os.listdir(foldername):
+            if fnmatch.fnmatch(file, "*.dp"):
+                filenames.append(os.path.join(foldername,file))
+        return self.gettingData_pred(filenames)
 
 if __name__ == '__main__':
     Gears()
