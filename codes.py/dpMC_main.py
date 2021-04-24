@@ -27,7 +27,6 @@ from keras.models import load_model
 from keras.models import model_from_json
 
 from dpMC_Gears import Gears
-from dpMC_tcn import TCN
 
 
 import fnmatch
