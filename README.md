@@ -97,7 +97,7 @@ For the training of dpMC, only singly identified missed cleavage sites or cleava
 
 ## Compiled software of dpMC
 
-**To provide researcher one more handy usage of dpMC, we also provide the compiled software on Windows system, please download [dpMC](https://zenodo.org/deposit/4592409#) and associated [user manual](https://zenodo.org/deposit/4592409#) for further information.**
+**To provide researcher one more handy usage of dpMC, we also provide the compiled software on Windows system, please download [dpMC](https://zenodo.org/record/4592409#.YIbVT2gzaUk) and associated [user manual](https://zenodo.org/record/4592409#.YIbVT2gzaUk) for further information.**
 
 ## Contacts
 Please submit any issues happened to dpMC on issues section or send Emails to dpMC.sun@gmail.com.
