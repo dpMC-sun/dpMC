@@ -113,7 +113,7 @@ def preprocess_SP(fasta_ref,dats_mc_sp):
 
                 dff_fKR11 = df1_fKR.iloc[seq1tg, :]
                 ############################################
-                                df10_fKR1 = dff_fKR11[dff_fKR11['MC'] == 0]
+                df10_fKR1 = dff_fKR11[dff_fKR11['MC'] == 0]
                 df11_fKR1 = dff_fKR11[dff_fKR11['MC'] == 1]
                 df12_fKR1 = dff_fKR11[dff_fKR11['MC'] == 2]
 
