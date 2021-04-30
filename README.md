@@ -93,11 +93,11 @@ For the training of dpMC, only singly identified missed cleavage sites or cleava
    * For the `training` function, the model files can be found under directory `./working directory/dpMC/md/XXX-XX-XX_XX_XX_XX_XXXXXX/`.
 
 * **The digestion files**. The digestion files can be generated during prediction of digestions on fasta files by selecting *`predict`* function. The results contain four columns: 1) `ID`: protein ID, 2) `Sequence`: digested peptide sequence, 3) `PEPlength`: peptide length , 4) `Pos_start`: start position in protein sequence for given peptide, 5) `Pos_end`: end position in protein sequence for given peptide, 6) `Pos_KR`: lysine or arginine position in protein sequence for given peptide, 7) `stats_KR`: predicted probabilities of missed cleavages for `Pos_KR`, which the `Pos_KR` less than 8 were assigned as 1 and will not be cleaved, 8) `MC`: the number of missed cleavages.
-   * For the `digestion` function, the digested file can be found in `./working directory/dpMC/Digested/dpMC_fasta_digested.txt`.
+   * For the `digestion` function, the digested file can be found in `./working directory/dpMC/Digested/ dpMC_fasta_digested.txt`.
 
 ## Compiled software of dpMC
 
-**To provide researcher one more handy usage of dpMC, we also provide the compiled software on Windows system, please download [dpMC](https://zenodo.org/deposit/4592409#) and associated [user manual](https://zenodo.org/deposit/4592409#) for further information.**
+**To provide researcher one more handy usage of dpMC, we also provide the compiled software on Windows system, please download [dpMC](https://zenodo.org/record/4592409#.YIbVT2gzaUk) and associated [user manual](https://zenodo.org/record/4592409#.YIbVT2gzaUk) for further information.**
 
 ## Contacts
 Please submit any issues happened to dpMC on issues section or send Emails to dpMC.sun@gmail.com.
