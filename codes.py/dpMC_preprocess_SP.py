@@ -66,6 +66,7 @@ def preprocess_SP(fasta_ref,dats_mc_sp):
                 seqqs = [df1f.iloc[i, 1] for i in range(df1f.shape[0])]
                 PGs = [df1f.iloc[i, 0] for i in range(df1f.shape[0])]
                 lastAA = [df1f.iloc[i, 1][len(df1f.iloc[i, 1]) - 1] for i in range(df1f.shape[0])]
+
                 start_pos = [
                     re.search(df1f.iloc[i, 1], str(dict_fasta[df1f.iloc[i, 0].split(';')[0]])).span(0)[0] + 1
                     for i in range(df1f.shape[0])]
@@ -73,15 +74,16 @@ def preprocess_SP(fasta_ref,dats_mc_sp):
                 end_pos = [re.search(df1f.iloc[i, 1], str(dict_fasta[df1f.iloc[i, 0].split(';')[0]])).span(0)[1]
                            for i in range(df1f.shape[0])]
 
+                preAA = [str(dict_fasta[df1f.iloc[i, 0].split(';')[0]])[start_pos[i] - 2] for i in range(df1f.shape[0])]
+
                 MC = [len(re.findall(r'K|R', df1f.iloc[i, 1])) - 1 for i in range(df1f.shape[0])]
 
-                dft6_f = {'seq': seqqs, 'LastAA': lastAA, 'start_pos': start_pos,
-                          'end_pos': end_pos, 'name': PGs, 'MC': MC}
-
+                dft6_f = {'seq': df1f['SEQ'], 'preAA':preAA, 'LastAA': lastAA, 'start_pos': start_pos,
+                          'end_pos': end_pos, 'name': df1f['PG'], 'MC': MC}
                 df6_f = pd.DataFrame(dft6_f)
                 df6_ff = df6_f.dropna(axis=0, how='any')
 
-                df1_fKR = df6_ff.loc[df6_ff['LastAA'].isin(['K', 'R'])]
+                df1_fKR = df6_ff.loc[df6_ff['LastAA'].isin(['K', 'R']) & df6_ff['preAA'].isin(['K', 'R'])]
                 df1_fKR = df1_fKR.reindex(df1_fKR.seq.str.len().sort_values().index)
                 df1_fKR.index = range(0, df1_fKR.shape[0])
 
@@ -112,70 +114,66 @@ def preprocess_SP(fasta_ref,dats_mc_sp):
                 seq1tg = [seqL.index(i) for i in seqFR]
 
                 dff_fKR11 = df1_fKR.iloc[seq1tg, :]
+
                 ############################################
                 df10_fKR1 = dff_fKR11[dff_fKR11['MC'] == 0]
                 df11_fKR1 = dff_fKR11[dff_fKR11['MC'] == 1]
                 df12_fKR1 = dff_fKR11[dff_fKR11['MC'] == 2]
 
-                df10_fKR1_seqwin = [
-                    str(dict_fasta[df10_fKR1.iloc[i, 4]])[(df10_fKR1.iloc[i, 3] - 8):(df10_fKR1.iloc[i, 3] + 7)]
-                    for i in range(df10_fKR1.shape[0])]
+                dff_fKR11_seqwin_last0 = [
+                    str(dict_fasta[dff_fKR11.iloc[i, 5]])[(dff_fKR11.iloc[i, 4] - 8):(dff_fKR11.iloc[i, 4] + 7)]
+                    for i in range(dff_fKR11.shape[0])]
 
-                df10_fKR1_seqwin9 = [df10_fKR1_seqwin[i] for i in range(len(df10_fKR1_seqwin)) if
-                                     len(df10_fKR1_seqwin[i]) >= 9]
+                dff_fKR11_seqwin9_last0 = [dff_fKR11_seqwin_last0[i] for i in range(len(dff_fKR11_seqwin_last0)) if
+                                           len(dff_fKR11_seqwin_last0[i]) >= 9]
 
-                df111_fKR1_seqwin = [str(dict_fasta[df11_fKR1.iloc[i, 4]])[([m.start() for m in re.finditer('K|R',df11_fKR1.iloc[i, 0])][0] +
-                                                                            df11_fKR1.iloc[i, 2] - 8):([m.start() for m in
-                                                                            re.finditer('K|R',df11_fKR1.iloc[i, 0])][0] + df11_fKR1.iloc[i, 2] + 7)]
+                dff0_fKR11_seqwin9 = dff_fKR11_seqwin9_last0.copy()
+
+                dff_fKR11_seqwin_pre0 = [
+                    str(dict_fasta[dff_fKR11.iloc[i, 5]])[(dff_fKR11.iloc[i, 3] - 9):(dff_fKR11.iloc[i, 3] + 6)]
+                    for i in range(dff_fKR11.shape[0])]
+
+                dff_fKR11_seqwin9_pre0 = [dff_fKR11_seqwin_pre0[i] for i in range(len(dff_fKR11_seqwin_pre0)) if
+                                          len(dff_fKR11_seqwin_pre0[i]) >= 9]
+
+                dff0_fKR11_seqwin9.extend(dff_fKR11_seqwin9_pre0)
+                ############################################
+                df111_fKR1_seqwin = [str(dict_fasta[df11_fKR1.iloc[i, 5]])[
+                                     ([m.start() for m in re.finditer('K|R', df11_fKR1.iloc[i, 0])][0] + df11_fKR1.iloc[
+                                         i, 3] - 8):(
+                                             [m.start() for m in re.finditer('K|R', df11_fKR1.iloc[i, 0])][0] + df11_fKR1.iloc[
+                                         i, 3] + 7)]
                                      for i in range(df11_fKR1.shape[0])]
 
                 df111_fKR1_seqwin9 = [df111_fKR1_seqwin[i] for i in range(len(df111_fKR1_seqwin)) if
                                       len(df111_fKR1_seqwin[i]) >= 9]
 
-                df110_fKR1_seqwin = [
-                    str(dict_fasta[df11_fKR1.iloc[i, 4]])[(df11_fKR1.iloc[i, 3] - 8):(df11_fKR1.iloc[i, 3] + 7)]
-                    for i in range(df11_fKR1.shape[0])]
-
-                df110_fKR1_seqwin9 = [df110_fKR1_seqwin[i] for i in range(len(df110_fKR1_seqwin)) if
-                                      len(df110_fKR1_seqwin[i]) >= 9]
-
-                ######################################################
-                df121_fKR1_seqwin = [str(dict_fasta[df12_fKR1.iloc[i, 4]])[([m.start() for m in re.finditer('K|R',df12_fKR1.iloc[i, 0])][0] +
-                                                                            df12_fKR1.iloc[i, 2] - 8):([m.start() for m in
-                                                                            re.finditer('K|R',df12_fKR1.iloc[i, 0])][0] + df12_fKR1.iloc[i, 2] + 7)]
+                ################################################
+                df121_fKR1_seqwin = [str(dict_fasta[df12_fKR1.iloc[i, 5]])[
+                                     ([m.start() for m in re.finditer('K|R', df12_fKR1.iloc[i, 0])][0] + df12_fKR1.iloc[
+                                         i, 3] - 8):(
+                                             [m.start() for m in re.finditer('K|R', df12_fKR1.iloc[i, 0])][0] + df12_fKR1.iloc[
+                                         i, 3] + 7)]
                                      for i in range(df12_fKR1.shape[0])]
 
                 df121_fKR1_seqwin9 = [df121_fKR1_seqwin[i] for i in range(len(df121_fKR1_seqwin)) if
                                       len(df121_fKR1_seqwin[i]) >= 9]
 
-                df122_fKR1_seqwin = [str(dict_fasta[df12_fKR1.iloc[i, 4]])[([m.start() for m in re.finditer('K|R',df12_fKR1.iloc[i, 0])][1] +
-                                                                            df12_fKR1.iloc[i, 2] - 8):([m.start() for m in
-                                                                            re.finditer('K|R',df12_fKR1.iloc[i, 0])][1] + df12_fKR1.iloc[i, 2] + 7)]
+                df122_fKR1_seqwin = [str(dict_fasta[df12_fKR1.iloc[i, 5]])[
+                                     ([m.start() for m in re.finditer('K|R', df12_fKR1.iloc[i, 0])][1] + df12_fKR1.iloc[
+                                         i, 3] - 8):(
+                                             [m.start() for m in re.finditer('K|R', df12_fKR1.iloc[i, 0])][1] + df12_fKR1.iloc[
+                                         i, 3] + 7)]
                                      for i in range(df12_fKR1.shape[0])]
 
                 df122_fKR1_seqwin9 = [df122_fKR1_seqwin[i] for i in range(len(df122_fKR1_seqwin)) if
                                       len(df122_fKR1_seqwin[i]) >= 9]
 
-                df120_fKR1_seqwin = [
-                    str(dict_fasta[df12_fKR1.iloc[i, 4]])[(df12_fKR1.iloc[i, 3] - 8):(df12_fKR1.iloc[i, 3] + 7)]
-                    for i in range(df12_fKR1.shape[0])]
-
-                df120_fKR1_seqwin9 = [df120_fKR1_seqwin[i] for i in range(len(df120_fKR1_seqwin)) if
-                                      len(df120_fKR1_seqwin[i]) >= 9]
-
-                shuffle(df10_fKR1_seqwin9)
+                shuffle(dff0_fKR11_seqwin9)
 
                 df7f1 = df111_fKR1_seqwin9 + df121_fKR1_seqwin9 + df122_fKR1_seqwin9
-                df7f01t = df110_fKR1_seqwin9 + df120_fKR1_seqwin9
 
-                shuffle(df7f01t)
-
-                rio = (df11_fKR1.shape[0] + df12_fKR1.shape[0]) / (
-                            df10_fKR1.shape[0] + df11_fKR1.shape[0] + df12_fKR1.shape[0])
-
-                df7f01 = df7f01t[0:round(len(df7f01t) * rio)]
-                df7f00 = df10_fKR1_seqwin9[0:(len(df7f1) - len(df7f01))]
-                df7f0 = df7f00 + df7f01
+                df7f0 = dff0_fKR11_seqwin9[0:len(df7f1)]
 
                 dcMC0 = [df7f0[i] for i in range(len(df7f0)) if 'X' not in df7f0[i] and 'U' not in df7f0[i]]
                 dcMC1 = [df7f1[i] for i in range(len(df7f1)) if 'X' not in df7f1[i] and 'U' not in df7f1[i]]
@@ -188,15 +186,16 @@ def preprocess_SP(fasta_ref,dats_mc_sp):
                 random.seed(0)
                 dcMC0uf = [i for i in dcMC0u if i not in dcMC01u_cp]
                 shuffle(dcMC0uf)
+
                 dcMC1uf = [i for i in dcMC1u if i not in dcMC01u_cp]
 
                 mp = min(len(dcMC0uf), len(dcMC1uf))
                 dcMC0p = dcMC0uf[0:mp]
+
                 dcMC1p = dcMC1uf[0:mp]
 
                 mctg0 = [0] * mp
                 mctg1 = [1] * mp
-
 
                 dcMC01p = dcMC0p + dcMC1p
                 mctg01 = mctg0 + mctg1
@@ -236,6 +235,4 @@ def preprocess_SP(fasta_ref,dats_mc_sp):
             print('Please check your fasta file!')
     except:
         print('Please check your datasets!')
-
-
 
