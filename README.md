@@ -53,7 +53,7 @@ dpMC was developed under Python 3.6.5(Anaconda3 5.2.0 64-bit) with keras tensorf
 
 
 ## Preprocessing of datasets
-For the training of dpMC, only singly identified missed cleavage sites or cleavae sites are used. Ambiguous cleavage sites which are ovserved having both of cleavaged and missed cleavaged states are abandoned. This function has been integrated in parsing peptides file.
+For the training of dpMC, only high qualified singly identified missed cleavage sites or cleavae sites are used. Ambiguous cleavage sites which are ovserved having both of cleavaged and missed cleavaged states are abandoned. This function has been integrated in parsing peptides file.
 
 ## Procedures to train dpMC model
 1) Start using dpMC by opening command interpreter *`cmd.exe`* in windows platform or *`shell`* in Liux platform.
